@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026년 하계성수기 휴양시설 이용 신청</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Pretendard', 'Noto Sans KR', sans-serif;
+    background: #f5f6f8;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
+
+  .page-header {
+    background: #1c3d6e;
+    color: #fff;
+    padding: 28px 24px 24px;
+    text-align: center;
+  }
+  .page-header .year-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: #b8d4f5;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+  .page-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: #a8c4e8;
+  }
+
+  .notice-box {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    margin: 20px 16px;
+    padding: 14px 16px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #78350f;
+  }
+  .notice-box strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #b45309;
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+  }
+  .notice-box li {
+    list-style: none;
+    padding-left: 10px;
+    position: relative;
+  }
+  .notice-box li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: #f59e0b;
+    font-weight: 700;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #4b5563;
+    letter-spacing: 0.06em;
+    padding: 0 16px;
+    margin: 24px 0 10px;
+  }
+
+  .facility-list {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .facility-card {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .facility-card:hover {
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.08);
+  }
+  .facility-card.selected {
+    border-color: #1c3d6e;
+    box-shadow: 0 0 0 3px rgba(28,61,110,0.10);
+    background: #f0f5ff;
+  }
+
+  .facility-radio {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    accent-color: #1c3d6e;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .facility-info { flex: 1; }
+  .facility-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+    flex-wrap: wrap;
+  }
+  .brand-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+  }
+  .brand-소노   { background: #dbeafe; color: #1e40af; }
+  .brand-한화   { background: #fef3c7; color: #92400e; }
+  .brand-리솜   { background: #d1fae5; color: #065f46; }
+  .brand-휘닉스 { background: #ede9fe; color: #4c1d95; }
+  .brand-금호   { background: #fee2e2; color: #991b1b; }
+  .brand-오크밸리 { background: #f0fdf4; color: #14532d; }
+
+  .facility-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+  }
+  .facility-room {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .facility-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #374151;
+  }
+  .meta-label {
+    color: #9ca3af;
+    font-size: 11px;
+  }
+  .meta-value {
+    font-weight: 600;
+  }
+  .price-value {
+    color: #1c3d6e;
+    font-weight: 700;
+  }
+
+  .form-section {
+    padding: 0 16px;
+    margin-top: 24px;
+  }
+  .form-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 20px 18px;
+  }
+  .form-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .field-group {
+    margin-bottom: 14px;
+  }
+  .field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .field-label .required {
+    color: #ef4444;
+    margin-left: 2px;
+  }
+  input[type="text"],
+  input[type="tel"] {
+    width: 100%;
+    height: 42px;
+    padding: 0 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #111827;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input:focus {
+    border-color: #1c3d6e;
+    box-shadow: 0 0 0 3px rgba(28,61,110,0.10);
+  }
+  input::placeholder { color: #9ca3af; }
+
+  .submit-area {
+    padding: 20px 16px 36px;
+  }
+  .submit-btn {
+    width: 100%;
+    height: 52px;
+    background: #1c3d6e;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .submit-btn:hover { background: #163258; }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1a1a1a;
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    z-index: 9999;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+  .toast.success { background: #065f46; }
+  .toast.error { background: #991b1b; }
+
+  .selected-summary {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    color: #1e40af;
+    display: none;
+  }
+  .selected-summary.visible { display: block; }
+  .selected-summary .sum-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 13px;
+  }
+  .selected-summary .sum-detail {
+    color: #3b82f6;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 9998;
+    align-items: center;
+    justify-content: center;
+  }
+  .loading-overlay.show { display: flex; }
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="year-badge">2026 하계성수기</div>
+  <h1>휴양시설 이용 신청</h1>
+  <p>신세계푸드 임직원 복지 프로그램</p>
+</div>
+
+<div class="notice-box">
+  <strong>📋 신청 전 필독 사항</strong>
+  <ul>
+    <li>1인당 1건만 신청 가능합니다</li>
+    <li>신청 이후 취소 불가 (취소 시 페널티 적용)</li>
+    <li>전년도 NO-SHOW 사원 신청 불가</li>
+    <li>당해년도 이용가능일수(3박) 모두 사용한 사원 신청 불가</li>
+    <li>목록의 리조트·평형·일자 외 신청 불가</li>
+  </ul>
+</div>
+
+<div class="section-title">STEP 1 · 시설 선택</div>
+<div class="facility-list" id="facilityList"></div>
+
+<div class="form-section">
+  <div class="section-title" style="padding:0; margin-top:24px; margin-bottom:10px;">STEP 2 · 신청자 정보</div>
+  <div class="form-card">
+    <h3>본인 정보 입력</h3>
+    <div class="selected-summary" id="selectedSummary">
+      <div class="sum-title" id="sumTitle"></div>
+      <div class="sum-detail" id="sumDetail"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="empId">사번 <span class="required">*</span></label>
+      <input type="text" id="empId" placeholder="예) 123456" maxlength="10">
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="empName">이름 <span class="required">*</span></label>
+      <input type="text" id="empName" placeholder="홍길동">
+    </div>
+    <div class="field-group">
+      <label class="field-label" for="empDept">부서 <span class="required">*</span></label>
+      <input type="text" id="empDept" placeholder="예) 인사팀">
+    </div>
+    <div class="field-group" style="margin-bottom:0;">
+      <label class="field-label" for="empPhone">휴대폰번호 <span class="required">*</span></label>
+      <input type="tel" id="empPhone" placeholder="010-0000-0000" maxlength="13">
+    </div>
+  </div>
+</div>
+
+<div class="submit-area">
+  <button class="submit-btn" id="submitBtn" onclick="submitForm()">신청하기</button>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
+
+<script>
+// ================================================================
+//  ★ 여기에 Google Apps Script 웹앱 URL을 입력하세요
+//  배포 후 받은 URL 붙여넣기 (아래 예시 URL을 교체)
+// ================================================================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-5zXZpAcaVecDv4pDxZWMG-tg4KLCKsVWOQQsN6z7xzqgiTb-Zkf8mY6V7cTeqENNPw/exec';
+
+// ================================================================
+//  시설 데이터 (엑셀 2026년 신청 시트 기준)
+// ================================================================
+const FACILITIES = [
+  { id: 1,  brand: '소노',    name: '쏠비치 삼척',       room: '호텔 / 슈페리어 가든테라스 더블 (2인/최대3인)', nights: '1박', checkin: '07.26.(일)', checkout: '07.27.(월)', price: 348000 },
+  { id: 2,  brand: '소노',    name: '쏠비치 양양',        room: '호텔 / 슈페리어 스탠다드 더블 (2인/최대3인)',    nights: '1박', checkin: '08.10.(월)', checkout: '08.11.(화)', price: 197000 },
+  { id: 3,  brand: '소노',    name: '쏠비치 양양',        room: '호텔 / 디럭스 스탠다드 패밀리 트윈 (2인/최대3인)', nights: '1박', checkin: '08.16.(일)', checkout: '08.17.(월)', price: 315000 },
+  { id: 4,  brand: '소노',    name: '소노캄 제주',        room: '리조트 / 슈페리어 스탠다드 패밀리 트윈 (4인/최대6인)', nights: '1박', checkin: '07.31.(금)', checkout: '08.01.(토)', price: 264000 },
+  { id: 5,  brand: '한화',    name: '산정호수 안시(포천)', room: '디럭스 호텔형 (4인/최대6인)',                   nights: '2박', checkin: '07.30.(목)', checkout: '08.01.(토)', price: 486000 },
+  { id: 6,  brand: '리솜',    name: '스플라스 리솜 덕산', room: 'S30 / 스테이 클린(스플라스) (4인)',             nights: '2박', checkin: '07.30.(목)', checkout: '08.01.(토)', price: 444000 },
+  { id: 7,  brand: '리솜',    name: '포레스트 리솜 제천', room: 'S30 / 빌라 클린(포레스트) (5인)',               nights: '2박', checkin: '08.01.(토)', checkout: '08.03.(월)', price: 594000 },
+  { id: 8,  brand: '리솜',    name: '스플라스 리솜 덕산', room: 'S30 / 스테이 클린(스플라스) (4인)',             nights: '2박', checkin: '08.10.(월)', checkout: '08.12.(수)', price: 360000 },
+  { id: 9,  brand: '휘닉스',  name: '휘닉스 파크 평창',  room: '콘도 로얄 (132.23㎡) (5인/최대6인)',           nights: '1박', checkin: '08.01.(토)', checkout: '08.02.(일)', price: 410000 },
+  { id: 10, brand: '휘닉스',  name: '휘닉스 파크 평창',  room: '콘도 스탠다드 (66.11㎡) (4인)',                nights: '1박', checkin: '08.29.(토)', checkout: '08.30.(일)', price: 176000 },
+  { id: 11, brand: '휘닉스',  name: '휘닉스 아일랜드 제주', room: '콘도 로얄 (110.86㎡) (4인/최대6인)',         nights: '2박', checkin: '08.27.(목)', checkout: '08.29.(토)', price: 444000 },
+  { id: 12, brand: '금호',    name: '금호 설악 리조트',  room: '휴그린스위트(92.5㎡) (5인)',                    nights: '1박', checkin: '07.18.(토)', checkout: '07.19.(일)', price: 198000 },
+  { id: 13, brand: '금호',    name: '금호 통영 리조트',  room: '패밀리디럭스(53.3㎡) (4인)',                    nights: '2박', checkin: '08.17.(월)', checkout: '08.19.(수)', price: 218000 },
+  { id: 14, brand: '오크밸리', name: '밸리빌리지',        room: '밸리빌리지 31평형 (5인)',                       nights: '1박', checkin: '07.29.(수)', checkout: '07.30.(목)', price: 135000 },
+  { id: 15, brand: '오크밸리', name: '힐스빌리지',        room: '힐스빌리지 25평형 (4인)',                       nights: '2박', checkin: '08.22.(토)', checkout: '08.24.(월)', price: 190000 },
+];
+
+let selectedId = null;
+
+function renderFacilities() {
+  const list = document.getElementById('facilityList');
+  list.innerHTML = FACILITIES.map(f => `
+    <label class="facility-card" id="card-${f.id}" onclick="selectFacility(${f.id})">
+      <input type="radio" name="facility" class="facility-radio" value="${f.id}">
+      <div class="facility-info">
+        <div class="facility-top">
+          <span class="brand-badge brand-${f.brand}">${f.brand}</span>
+          <span class="facility-name">${f.name}</span>
+        </div>
+        <div class="facility-room">${f.room}</div>
+        <div class="facility-meta">
+          <div class="meta-item"><span class="meta-label">입실</span><span class="meta-value">${f.checkin}</span></div>
+          <div class="meta-item"><span class="meta-label">퇴실</span><span class="meta-value">${f.checkout}</span></div>
+          <div class="meta-item"><span class="meta-label">이용</span><span class="meta-value">${f.nights}</span></div>
+          <div class="meta-item"><span class="meta-value price-value">${f.price.toLocaleString()}원</span></div>
+        </div>
+      </div>
+    </label>
+  `).join('');
+}
+
+function selectFacility(id) {
+  selectedId = id;
+  document.querySelectorAll('.facility-card').forEach(c => c.classList.remove('selected'));
+  const card = document.getElementById(`card-${id}`);
+  if (card) {
+    card.classList.add('selected');
+    card.querySelector('input[type=radio]').checked = true;
+  }
+  const f = FACILITIES.find(x => x.id === id);
+  if (f) {
+    document.getElementById('sumTitle').textContent = `${f.brand} ${f.name}`;
+    document.getElementById('sumDetail').textContent =
+      `${f.room}  |  ${f.checkin} ~ ${f.checkout} (${f.nights})  |  ${f.price.toLocaleString()}원`;
+    document.getElementById('selectedSummary').classList.add('visible');
+  }
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function phoneFormat(e) {
+  let v = e.target.value.replace(/\D/g, '');
+  if (v.length <= 3) e.target.value = v;
+  else if (v.length <= 7) e.target.value = v.slice(0,3) + '-' + v.slice(3);
+  else e.target.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
+}
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  void t.offsetWidth;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+async function submitForm() {
+  const empId    = document.getElementById('empId').value.trim();
+  const empName  = document.getElementById('empName').value.trim();
+  const empDept  = document.getElementById('empDept').value.trim();
+  const empPhone = document.getElementById('empPhone').value.trim();
+
+  if (!selectedId)      return showToast('시설을 선택해주세요', 'error');
+  if (!empId)           return showToast('사번을 입력해주세요', 'error');
+  if (!empName)         return showToast('이름을 입력해주세요', 'error');
+  if (!empDept)         return showToast('부서를 입력해주세요', 'error');
+  if (!empPhone)        return showToast('휴대폰번호를 입력해주세요', 'error');
+
+  const f = FACILITIES.find(x => x.id === selectedId);
+  const payload = {
+    신청일시: new Date().toLocaleString('ko-KR'),
+    콘도명: f.brand,
+    투숙지역: f.name,
+    평형: f.room,
+    이용일수: f.nights,
+    입실일: f.checkin,
+    퇴실일: f.checkout,
+    금액: f.price,
+    사번: empId,
+    이름: empName,
+    부서: empDept,
+    핸드폰번호: empPhone,
+  };
+
+  document.getElementById('loadingOverlay').classList.add('show');
+  document.getElementById('submitBtn').disabled = true;
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    document.getElementById('loadingOverlay').classList.remove('show');
+    showToast('✅ 신청이 완료되었습니다', 'success');
+    document.getElementById('submitBtn').textContent = '신청 완료';
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('submitBtn').style.background = '#065f46';
+  } catch (err) {
+    document.getElementById('loadingOverlay').classList.remove('show');
+    document.getElementById('submitBtn').disabled = false;
+    showToast('오류가 발생했습니다. 다시 시도해주세요', 'error');
+  }
+}
+
+document.getElementById('empPhone').addEventListener('input', phoneFormat);
+renderFacilities();
+</script>
+</body>
+</html>
