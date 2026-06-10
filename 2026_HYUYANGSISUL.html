@@ -360,11 +360,7 @@
     <div class="field-group">
       <label class="field-label" for="empDept">부서 <span class="required">*</span></label>
       <input type="text" id="empDept" placeholder="예) 인사팀">
-    </div>
-    <div class="field-group" style="margin-bottom:0;">
-      <label class="field-label" for="empPhone">휴대폰번호 <span class="required">*</span></label>
-      <input type="tel" id="empPhone" placeholder="010-0000-0000" maxlength="13">
-    </div>
+    </div>    
   </div>
 </div>
 
@@ -471,8 +467,7 @@ async function submitForm() {
   if (!empId)           return showToast('사번을 입력해주세요', 'error');
   if (!empName)         return showToast('이름을 입력해주세요', 'error');
   if (!empDept)         return showToast('부서를 입력해주세요', 'error');
-  if (!empPhone)        return showToast('휴대폰번호를 입력해주세요', 'error');
-
+ 
   const f = FACILITIES.find(x => x.id === selectedId);
   const payload = {
     신청일시: new Date().toLocaleString('ko-KR'),
@@ -485,8 +480,7 @@ async function submitForm() {
     금액: f.price,
     사번: empId,
     이름: empName,
-    부서: empDept,
-    핸드폰번호: empPhone,
+    부서: empDept,    
   };
 
   document.getElementById('loadingOverlay').classList.add('show');
