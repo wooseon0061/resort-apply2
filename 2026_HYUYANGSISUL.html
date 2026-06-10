@@ -134,11 +134,11 @@
     border-radius: 4px;
     letter-spacing: 0.03em;
   }
-  .brand-소노   { background: #dbeafe; color: #1e40af; }
-  .brand-한화   { background: #fef3c7; color: #92400e; }
-  .brand-리솜   { background: #d1fae5; color: #065f46; }
-  .brand-휘닉스 { background: #ede9fe; color: #4c1d95; }
-  .brand-금호   { background: #fee2e2; color: #991b1b; }
+  .brand-소노    { background: #dbeafe; color: #1e40af; }
+  .brand-한화    { background: #fef3c7; color: #92400e; }
+  .brand-리솜    { background: #d1fae5; color: #065f46; }
+  .brand-휘닉스  { background: #ede9fe; color: #4c1d95; }
+  .brand-금호    { background: #fee2e2; color: #991b1b; }
   .brand-오크밸리 { background: #f0fdf4; color: #14532d; }
 
   .facility-name {
@@ -208,8 +208,7 @@
     color: #ef4444;
     margin-left: 2px;
   }
-  input[type="text"],
-  input[type="tel"] {
+  input[type="text"] {
     width: 100%;
     height: 42px;
     padding: 0 13px;
@@ -274,7 +273,7 @@
     opacity: 1;
   }
   .toast.success { background: #065f46; }
-  .toast.error { background: #991b1b; }
+  .toast.error   { background: #991b1b; }
 
   .selected-summary {
     background: #eff6ff;
@@ -357,10 +356,10 @@
       <label class="field-label" for="empName">이름 <span class="required">*</span></label>
       <input type="text" id="empName" placeholder="홍길동">
     </div>
-    <div class="field-group">
+    <div class="field-group" style="margin-bottom:0;">
       <label class="field-label" for="empDept">부서 <span class="required">*</span></label>
       <input type="text" id="empDept" placeholder="예) 인사팀">
-    </div>    
+    </div>
   </div>
 </div>
 
@@ -372,31 +371,24 @@
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
 
 <script>
-// ================================================================
-//  ★ 여기에 Google Apps Script 웹앱 URL을 입력하세요
-//  배포 후 받은 URL 붙여넣기 (아래 예시 URL을 교체)
-// ================================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-5zXZpAcaVecDv4pDxZWMG-tg4KLCKsVWOQQsN6z7xzqgiTb-Zkf8mY6V7cTeqENNPw/exec';
+const APPS_SCRIPT_URL = '여기에_배포URL_입력';
 
-// ================================================================
-//  시설 데이터 (엑셀 2026년 신청 시트 기준)
-// ================================================================
 const FACILITIES = [
-  { id: 1,  brand: '소노',    name: '쏠비치 삼척',       room: '호텔 / 슈페리어 테라스 오션뷰 더블 (2인/최대3인)', nights: '1박', checkin: '07.26.(일)', checkout: '07.27.(월)', price: 348000 },
-  { id: 2,  brand: '소노',    name: '쏠비치 양양',        room: '호텔 / 슈페리어 스탠다드 더블 (2인/최대3인)',    nights: '1박', checkin: '08.10.(월)', checkout: '08.11.(화)', price: 197000 },
-  { id: 3,  brand: '소노',    name: '쏠비치 양양',        room: '호텔 / 디럭스 스탠다드 패밀리 트윈 (2인/최대3인)', nights: '1박', checkin: '08.16.(일)', checkout: '08.17.(월)', price: 315000 },
-  { id: 4,  brand: '소노',    name: '소노캄 제주',        room: '리조트 / 슈페리어 스탠다드 패밀리 트윈 (4인/최대6인)', nights: '1박', checkin: '07.31.(금)', checkout: '08.01.(토)', price: 264000 },
-  { id: 5,  brand: '한화',    name: '산정호수 안시(포천)', room: '디럭스 호텔형 (4인/최대6인)',                   nights: '2박', checkin: '07.30.(목)', checkout: '08.01.(토)', price: 486000 },
-  { id: 6,  brand: '리솜',    name: '스플라스 리솜 덕산', room: 'S30 / 스테이 클린(스플라스) (4인)',             nights: '2박', checkin: '07.30.(목)', checkout: '08.01.(토)', price: 444000 },
-  { id: 7,  brand: '리솜',    name: '포레스트 리솜 제천', room: 'S30 / 빌라 클린(포레스트) (5인)',               nights: '2박', checkin: '08.01.(토)', checkout: '08.03.(월)', price: 594000 },
-  { id: 8,  brand: '리솜',    name: '스플라스 리솜 덕산', room: 'S30 / 스테이 클린(스플라스) (4인)',             nights: '2박', checkin: '08.10.(월)', checkout: '08.12.(수)', price: 360000 },
-  { id: 9,  brand: '휘닉스',  name: '휘닉스 파크 평창',  room: '콘도 로얄 (132.23㎡) (5인/최대6인)',           nights: '1박', checkin: '08.01.(토)', checkout: '08.02.(일)', price: 410000 },
-  { id: 10, brand: '휘닉스',  name: '휘닉스 파크 평창',  room: '콘도 스탠다드 (66.11㎡) (4인)',                nights: '1박', checkin: '08.29.(토)', checkout: '08.30.(일)', price: 176000 },
-  { id: 11, brand: '휘닉스',  name: '휘닉스 아일랜드 제주', room: '콘도 로얄 (110.86㎡) (4인/최대6인)',         nights: '2박', checkin: '08.27.(목)', checkout: '08.29.(토)', price: 444000 },
-  { id: 12, brand: '금호',    name: '금호 설악 리조트',  room: '휴그린스위트(92.5㎡) (5인)',                    nights: '1박', checkin: '07.18.(토)', checkout: '07.19.(일)', price: 198000 },
-  { id: 13, brand: '금호',    name: '금호 통영 리조트',  room: '패밀리디럭스(53.3㎡) (4인)',                    nights: '2박', checkin: '08.17.(월)', checkout: '08.19.(수)', price: 218000 },
-  { id: 14, brand: '오크밸리', name: '밸리빌리지',        room: '밸리빌리지 31평형 (5인)',                       nights: '1박', checkin: '07.29.(수)', checkout: '07.30.(목)', price: 135000 },
-  { id: 15, brand: '오크밸리', name: '힐스빌리지',        room: '힐스빌리지 25평형 (4인)',                       nights: '2박', checkin: '08.22.(토)', checkout: '08.24.(월)', price: 190000 },
+  { id: 1,  brand: '소노',    name: '쏠비치 삼척',        room: '호텔 / 슈페리어 테라스 오션뷰 더블 (2인/최대3인)',      nights: '1박', checkin: '07.26.(일)', checkout: '07.27.(월)', price: 348000 },
+  { id: 2,  brand: '소노',    name: '쏠비치 양양',         room: '호텔 / 슈페리어 스탠다드 더블 (2인/최대3인)',           nights: '1박', checkin: '08.10.(월)', checkout: '08.11.(화)', price: 197000 },
+  { id: 3,  brand: '소노',    name: '쏠비치 양양',         room: '호텔 / 디럭스 스탠다드 패밀리 트윈 (2인/최대3인)',      nights: '1박', checkin: '08.16.(일)', checkout: '08.17.(월)', price: 315000 },
+  { id: 4,  brand: '소노',    name: '소노캄 제주',         room: '리조트 / 슈페리어 스탠다드 패밀리 트윈 (4인/최대6인)', nights: '1박', checkin: '07.31.(금)', checkout: '08.01.(토)', price: 264000 },
+  { id: 5,  brand: '한화',    name: '산정호수 안시(포천)', room: '디럭스 호텔형 (4인/최대6인)',                           nights: '2박', checkin: '07.30.(목)', checkout: '08.01.(토)', price: 486000 },
+  { id: 6,  brand: '리솜',    name: '스플라스 리솜 덕산',  room: 'S30 / 스테이 클린(스플라스) (4인)',                    nights: '2박', checkin: '07.30.(목)', checkout: '08.01.(토)', price: 444000 },
+  { id: 7,  brand: '리솜',    name: '포레스트 리솜 제천',  room: 'S30 / 빌라 클린(포레스트) (5인)',                      nights: '2박', checkin: '08.01.(토)', checkout: '08.03.(월)', price: 594000 },
+  { id: 8,  brand: '리솜',    name: '스플라스 리솜 덕산',  room: 'S30 / 스테이 클린(스플라스) (4인)',                    nights: '2박', checkin: '08.10.(월)', checkout: '08.12.(수)', price: 360000 },
+  { id: 9,  brand: '휘닉스',  name: '휘닉스 파크 평창',   room: '콘도 로얄 (132.23㎡) (5인/최대6인)',                   nights: '1박', checkin: '08.01.(토)', checkout: '08.02.(일)', price: 410000 },
+  { id: 10, brand: '휘닉스',  name: '휘닉스 파크 평창',   room: '콘도 스탠다드 (66.11㎡) (4인)',                        nights: '1박', checkin: '08.29.(토)', checkout: '08.30.(일)', price: 176000 },
+  { id: 11, brand: '휘닉스',  name: '휘닉스 아일랜드 제주', room: '콘도 로얄 (110.86㎡) (4인/최대6인)',                  nights: '2박', checkin: '08.27.(목)', checkout: '08.29.(토)', price: 444000 },
+  { id: 12, brand: '금호',    name: '금호 설악 리조트',   room: '휴그린스위트(92.5㎡) (5인)',                            nights: '1박', checkin: '07.18.(토)', checkout: '07.19.(일)', price: 198000 },
+  { id: 13, brand: '금호',    name: '금호 통영 리조트',   room: '패밀리디럭스(53.3㎡) (4인)',                            nights: '2박', checkin: '08.17.(월)', checkout: '08.19.(수)', price: 218000 },
+  { id: 14, brand: '오크밸리', name: '밸리빌리지',         room: '밸리빌리지 31평형 (5인)',                               nights: '1박', checkin: '07.29.(수)', checkout: '07.30.(목)', price: 135000 },
+  { id: 15, brand: '오크밸리', name: '힐스빌리지',         room: '힐스빌리지 25평형 (4인)',                               nights: '2박', checkin: '08.22.(토)', checkout: '08.24.(월)', price: 190000 },
 ];
 
 let selectedId = null;
@@ -426,48 +418,39 @@ function renderFacilities() {
 function selectFacility(id) {
   selectedId = id;
   document.querySelectorAll('.facility-card').forEach(c => c.classList.remove('selected'));
-  const card = document.getElementById(`card-${id}`);
+  const card = document.getElementById('card-' + id);
   if (card) {
     card.classList.add('selected');
     card.querySelector('input[type=radio]').checked = true;
   }
   const f = FACILITIES.find(x => x.id === id);
   if (f) {
-    document.getElementById('sumTitle').textContent = `${f.brand} ${f.name}`;
+    document.getElementById('sumTitle').textContent = f.brand + ' ' + f.name;
     document.getElementById('sumDetail').textContent =
-      `${f.room}  |  ${f.checkin} ~ ${f.checkout} (${f.nights})  |  ${f.price.toLocaleString()}원`;
+      f.room + '  |  ' + f.checkin + ' ~ ' + f.checkout + ' (' + f.nights + ')  |  ' + f.price.toLocaleString() + '원';
     document.getElementById('selectedSummary').classList.add('visible');
   }
-  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
-function phoneFormat(e) {
-  let v = e.target.value.replace(/\D/g, '');
-  if (v.length <= 3) e.target.value = v;
-  else if (v.length <= 7) e.target.value = v.slice(0,3) + '-' + v.slice(3);
-  else e.target.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7,11);
-}
-
-function showToast(msg, type = '') {
+function showToast(msg, type) {
   const t = document.getElementById('toast');
   t.textContent = msg;
-  t.className = 'toast ' + type;
+  t.className = 'toast ' + (type || '');
   void t.offsetWidth;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
+  setTimeout(function() { t.classList.remove('show'); }, 3000);
 }
 
 async function submitForm() {
-  const empId    = document.getElementById('empId').value.trim();
-  const empName  = document.getElementById('empName').value.trim();
-  const empDept  = document.getElementById('empDept').value.trim();
-  const empPhone = document.getElementById('empPhone').value.trim();
+  const empId   = document.getElementById('empId').value.trim();
+  const empName = document.getElementById('empName').value.trim();
+  const empDept = document.getElementById('empDept').value.trim();
 
-  if (!selectedId)      return showToast('시설을 선택해주세요', 'error');
-  if (!empId)           return showToast('사번을 입력해주세요', 'error');
-  if (!empName)         return showToast('이름을 입력해주세요', 'error');
-  if (!empDept)         return showToast('부서를 입력해주세요', 'error');
- 
+  if (!selectedId) return showToast('시설을 선택해주세요', 'error');
+  if (!empId)      return showToast('사번을 입력해주세요', 'error');
+  if (!empName)    return showToast('이름을 입력해주세요', 'error');
+  if (!empDept)    return showToast('부서를 입력해주세요', 'error');
+
   const f = FACILITIES.find(x => x.id === selectedId);
   const payload = {
     신청일시: new Date().toLocaleString('ko-KR'),
@@ -480,7 +463,7 @@ async function submitForm() {
     금액: f.price,
     사번: empId,
     이름: empName,
-    부서: empDept,    
+    부서: empDept,
   };
 
   document.getElementById('loadingOverlay').classList.add('show');
@@ -494,7 +477,7 @@ async function submitForm() {
       body: JSON.stringify(payload),
     });
     document.getElementById('loadingOverlay').classList.remove('show');
-    showToast('✅ 신청이 완료되었습니다', 'success');
+    showToast('신청이 완료되었습니다', 'success');
     document.getElementById('submitBtn').textContent = '신청 완료';
     document.getElementById('submitBtn').disabled = true;
     document.getElementById('submitBtn').style.background = '#065f46';
@@ -505,7 +488,6 @@ async function submitForm() {
   }
 }
 
-document.getElementById('empPhone').addEventListener('input', phoneFormat);
 renderFacilities();
 </script>
 </body>
